@@ -1,4 +1,4 @@
-# authentication-client
+# Authentication
 Codebase for authentication with jwt and refresh token | client side
 
 

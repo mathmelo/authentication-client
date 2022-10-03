@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import Router from 'next/router';
 
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
-import { api } from "../services/api";
+import { api } from "../services/apiClient";
 
 type AuthProviderProps = {
   children: ReactNode
@@ -83,7 +83,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       Router.push('/dashboard');
     } catch (err) {
-      console.log(err);
     }
   }
 

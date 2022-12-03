@@ -25,7 +25,7 @@ type AuthContextData = {
   signIn(credentials: SignInInputData): Promise<void>
 };
 
-const AuthContext = createContext({} as AuthContextData);
+export const AuthContext = createContext({} as AuthContextData);
 
 export function signOut() {
   destroyCookie(undefined, 'auth.token');

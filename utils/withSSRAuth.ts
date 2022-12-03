@@ -9,7 +9,7 @@ interface IOptionsProps {
   roles?: string[];
 }
 
-export function withSSRAuth<P>(fn: GetServerSideProps<P>, options: IOptionsProps) {
+export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: IOptionsProps) {
   return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
     const token = cookies['auth.token'];

@@ -22,14 +22,19 @@ type User = {
 type AuthContextData = {
   user: User;
   isAuthenticated: boolean;
-  signIn(credentials: SignInInputData): Promise<void>
+  signIn: (credentials: SignInInputData) => Promise<void>
+  signOut: () => void;
 };
 
 export const AuthContext = createContext({} as AuthContextData);
 
+const authChannel = new BroadcastChannel('auth');
+
 export function signOut() {
   destroyCookie(undefined, 'auth.token');
   destroyCookie(undefined, 'auth.refreshToken');
+
+  authChannel.postMessage('signOut');
 
   Router.push('/');
 }
@@ -37,6 +42,19 @@ export function signOut() {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
   const isAuthenticated = !!user;
+
+  useEffect(() => {
+    authChannel.onmessage = (message) => {
+      console.log(message)
+      switch(message.data) {
+        case 'signOut':
+          signOut();
+          break;
+        default:
+          break;
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const { 'auth.token': token } = parseCookies();
@@ -87,7 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, signIn, user }}>
+    <AuthContext.Provider value={{ isAuthenticated, signIn, user, signOut }}>
       {children}
     </AuthContext.Provider>
   )
